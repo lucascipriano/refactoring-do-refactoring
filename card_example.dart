@@ -1,19 +1,24 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class RandomScreen extends StatefulWidget {
+  const RandomScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<RandomScreen> createState() => _RandomScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  int _currentIndex = 0;
+class _RandomScreenState extends State<RandomScreen> {
+  final List<Widget> _pages = [
+    const _Dots(),
+    const _Dots(),
+    const _Dots(),
+  ];
+  int currentIndex = 0;
+
   @override
   void initState() {
     super.initState();
-    _currentIndex = 0;
   }
 
   final pageController = PageController();
@@ -32,36 +37,34 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             height: 160,
             width: 600,
-            child: PageView(
-              controller: pageController,
-              onPageChanged: (index) {
+            child: PageView.builder(
+              onPageChanged: (int page) {
                 setState(() {
-                  _currentIndex = index;
+                  currentIndex = page;
                 });
               },
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.red,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.blue,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.amber,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                ),
-              ],
+              itemCount: _pages.length,
+              itemBuilder: (BuildContext context, int index) {
+                return _pages[index % _pages.length];
+              },
             ),
           ),
-          Indicator(currentIndex: _currentIndex)
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List<Widget>.generate(
+              _pages.length,
+              (index) => Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                child: InkWell(
+                  child: CircleAvatar(
+                    radius: 8,
+                    backgroundColor:
+                        currentIndex == index ? Colors.black : Colors.grey,
+                  ),
+                ),
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -70,59 +73,20 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(IntProperty('currentIndex', _currentIndex));
+    properties.add(IntProperty('currentIndex', currentIndex));
   }
 }
 
-class Indicator extends StatelessWidget {
-  final int currentIndex;
-  getColor(int index) {
-    if (index == currentIndex) {
-      return Colors.black;
-    }
-    if (index != currentIndex) {
-      return Colors.grey;
-    }
-  }
-
-  const Indicator({
-    super.key,
-    required this.currentIndex,
-  });
+class _Dots extends StatelessWidget {
+  const _Dots();
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Container(
-          height: 8,
-          width: 8,
-          decoration: BoxDecoration(
-            color: getColor(0),
-            shape: BoxShape.circle,
-          ),
-        ),
-        const SizedBox(width: 8),
-        Container(
-          height: 8,
-          width: 8,
-          decoration: BoxDecoration(
-            color: getColor(1),
-            shape: BoxShape.circle,
-          ),
-        ),
-        const SizedBox(width: 8),
-        Container(
-          height: 8,
-          width: 8,
-          decoration: BoxDecoration(
-            color: getColor(2),
-            shape: BoxShape.circle,
-          ),
-        ),
-        const SizedBox(width: 8),
-      ],
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.red,
+        borderRadius: BorderRadius.circular(20),
+      ),
     );
   }
 }
