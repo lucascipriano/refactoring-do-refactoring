@@ -6,6 +6,6 @@ Tirei a ideia de um vídeo que vi no canal do [Renato MotaDev](https://www.youtu
 
 
 
-[![Now in Android: 55][def]] 
 
-[def]: https://twitter.com/i/status/1627734877477937155
+https://user-images.githubusercontent.com/38764283/220178513-6650c74e-2c83-4bcd-87c7-8b2aad3d83ab.mp4
+
